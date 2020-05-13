@@ -28,6 +28,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController weightController = TextEditingController(text: '');
+  TextEditingController heightController = TextEditingController(text: '');
+  String _info = 'Informe os seus dados!';
+
+  void _resetFields() {
+    weightController.text = '';
+    heightController.text = '';
+    setState(() => _info = 'Informe os seus dados!');
+  }
+
+  void _setInfo(String info) {
+    setState(() => _info = info);
+  }
+
+  void _calculate() {
+    double weight = double.parse(weightController.text);
+    double height = double.parse(heightController.text) / 100;
+    double imc = weight / (height * height);
+    if (imc < 18.6) {
+      _setInfo('Abaixo do peso (${imc.toStringAsPrecision(4)})');
+    } else if (imc < 24.9) {
+      _setInfo('Peso normal (${imc.toStringAsPrecision(4)})');
+    } else if (imc < 29.9) {
+      _setInfo('Excesso de peso (${imc.toStringAsPrecision(4)})');
+    } else if (imc < 34.9) {
+      _setInfo('Obesidade de Classe 1 (${imc.toStringAsPrecision(4)})');
+    } else if (imc < 39.9) {
+      _setInfo('Obesidade de Classe 2 (${imc.toStringAsPrecision(4)})');
+    } else {
+      _setInfo('Obesidade de Classe 3 (${imc.toStringAsPrecision(4)})');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.restore),
-            onPressed: () {},
+            onPressed: _resetFields,
           ),
         ],
       ),
@@ -52,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.green,
             ),
             TextField(
+              controller: weightController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Peso (Kg)',
@@ -66,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             TextField(
+              controller: heightController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Altura (cm)',
@@ -84,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 height: 50.0,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: _calculate,
                   child: Text(
                     'Calcular',
                     style: TextStyle(color: Colors.white, fontSize: 25.0),
@@ -94,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Text(
-              'Info',
+              _info,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.green, fontSize: 25.0),
             )
