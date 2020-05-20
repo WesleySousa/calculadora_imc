@@ -32,12 +32,15 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController heightController = TextEditingController(text: '');
   String _info = 'Informe os seus dados!';
 
-  final _formKey = new GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   void _resetFields() {
     weightController.text = '';
     heightController.text = '';
-    setState(() => _info = 'Informe os seus dados!');
+    setState(() {
+      _info = 'Informe os seus dados!';
+      _formKey = new GlobalKey<FormState>();
+    });
   }
 
   void _setInfo(String info) {
